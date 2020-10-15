@@ -1,5 +1,8 @@
 package br.com.zup.programaprincipal;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +16,7 @@ public class ProgramaPrincipal {
 	public static void percorrerEImprimirPecasDoEstoque(List<LojaDePecas> pecasDB) {
 
 		for (LojaDePecas peca : pecasDB) {
-			System.out.println("\n\t" + peca + "\n");
+			System.out.println("\n" + peca + "\n");
 		}
 
 	}
@@ -29,52 +32,52 @@ public class ProgramaPrincipal {
 	}
 
 	public static void gerenciaEstoque(Scanner teclado) throws SQLException {
-
-		menuInterno();
-
 		LojaDePecasDAO pecasDAO = new LojaDePecasDAO();
 		int opcaoInterna = 0;
 		int codigoDeBarras = 0;
 
-		System.out.print("\n\tOpção: \n");
-		opcaoInterna = teclado.nextInt();
+		do {
+			menuInterno();
 
-		switch (opcaoInterna) {
+			System.out.print("\n\tOpção: ");
+			opcaoInterna = teclado.nextInt();
 
-		case 1:
-			adicionaPecas(teclado, pecasDAO);
-			break;
+			switch (opcaoInterna) {
 
-		case 2:
-			consultaPecas(teclado, pecasDAO);
-			break;
+			case 1:
+				adicionaPecas(teclado, pecasDAO);
+				break;
 
-		case 3:
-			removePecaPorCodigoDeBarras(teclado, pecasDAO, codigoDeBarras);
-			break;
+			case 2:
+				consultaPecas(teclado, pecasDAO);
+				break;
 
-		case 4:
-			buscaPecasPorCodigoDeBarras(teclado, pecasDAO, codigoDeBarras);
-			break;
+			case 3:
+				removePecaPorCodigoDeBarras(teclado, pecasDAO, codigoDeBarras);
+				break;
 
-		case 5:
-			buscaPecasPorLetraReferencia(teclado, pecasDAO);
-			break;
+			case 4:
+				buscaPecasPorCodigoDeBarras(teclado, pecasDAO, codigoDeBarras);
+				break;
 
-		case 6:
-			buscaPecasPorModeloDoCarro(teclado, pecasDAO);
-			break;
+			case 5:
+				buscaPecasPorLetraReferencia(teclado, pecasDAO);
+				break;
 
-		case 7:
-			buscaPecasPorCategoria(teclado, pecasDAO);
-			break;
-		case 0:
-			System.out.println("\n\tMuito Obrigado!\n");
-			break;
-		default:
-			System.out.println("\n\tOpção Inválida, Tente Novamente\n");
-		}
+			case 6:
+				buscaPecasPorModeloDoCarro(teclado, pecasDAO);
+				break;
 
+			case 7:
+				buscaPecasPorCategoria(teclado, pecasDAO);
+				break;
+			case 0:
+				System.out.println("\n\tMuito Obrigado!\n");
+				break;
+			default:
+				System.out.println("\n\tOpção Inválida, Tente Novamente\n");
+			}
+		} while (opcaoInterna != 0);
 	}
 
 	public static void adicionaPecas(Scanner teclado, LojaDePecasDAO pecasDAO) {
@@ -126,14 +129,14 @@ public class ProgramaPrincipal {
 
 	public static void removePecaPorCodigoDeBarras(Scanner teclado, LojaDePecasDAO pecasDAO, int codigoDeBarras)
 			throws SQLException {
-		System.out.println("\n\tDigite o Cep Da Cidade A Ser Removida!\n");
+		System.out.println("\n\tDigite o Código De Barras Da Peças a Ser Removida!\n");
 		System.out.print("\tCódigo De Barras: ");
 		codigoDeBarras = teclado.nextInt();
 		pecasDAO.removePecaPorCodigoDeBarras(codigoDeBarras);
 	}
 
 	public static void buscaPecasPorCodigoDeBarras(Scanner teclado, LojaDePecasDAO pecasDAO, int codigoDeBarras) {
-		System.out.println("\n\tDigite o Cep Da Cidade A Ser Buscada!\n");
+		System.out.println("\n\tDigite o Código De Barras Referente a Peça a Ser Ser Buscada!\n");
 		System.out.print("\tCódigo De Barras: ");
 		codigoDeBarras = teclado.nextInt();
 		List<LojaDePecas> pecasDB = new ArrayList<LojaDePecas>();
@@ -184,16 +187,82 @@ public class ProgramaPrincipal {
 		}
 	}
 
-	public static void main(String[] args) throws SQLException {
+	public static void gerenciaVendas(Scanner teclado, LojaDePecasDAO pecasDAO) {
+
+		int opcaoInterna = 0;
+		do {
+			System.out.println("\n\t(1) - Para Comprar Uma Peça;\n");
+			System.out.println("\t(2) - Para Imprimir Relatório De Vendas;\n");
+			System.out.println("\t(0) - Para Sair;\n");
+			System.out.print("\n\tOpção: ");
+
+			opcaoInterna = teclado.nextInt();
+
+			switch (opcaoInterna) {
+
+			case 1:
+				buscaPecasPorLetraReferencia(teclado, pecasDAO);
+				verificaCondicoesDeVenda(teclado, pecasDAO);
+				break;
+
+			case 2:
+				imprimeRelatorioDeVendas(pecasDAO);
+				break;
+
+			case 0:
+				System.out.println("Muito Obrigado!");
+				break;
+
+			default:
+				System.out.println("Opção Inválida, Tente Novamente");
+				break;
+			}
+		} while (opcaoInterna != 0);
+	}
+
+	public static void verificaCondicoesDeVenda(Scanner teclado, LojaDePecasDAO pecasDAO) {
+		System.out.println("\n\tAgora Digite O Códito De Barras Referente A Peça Desejada!\n");
+		System.out.print("\tCódigo De Barras: ");
+		int codigoDeBarras = teclado.nextInt();
+
+		System.out.println("\n\tAgora Digite a Quantidade De Peças!\n");
+		System.out.print("\tQuantidade De Peças: ");
+		int qtdPecasAComprar = teclado.nextInt();
+
+		try {
+			float valorDaCompra = pecasDAO.vendaDePecas(qtdPecasAComprar, codigoDeBarras);
+			System.out.printf("\n\tO valor Da Compra Ficou Em R$ %.2f\n", valorDaCompra);
+			System.out.println("\n\tMuito Obrigado!\n");
+
+		} catch (SQLException | IOException e) {
+			e.printStackTrace();
+			System.err.println(e.getMessage());
+		}
+	}
+
+	public static void imprimeRelatorioDeVendas(LojaDePecasDAO pecasDAO) {
+		try {
+			pecasDAO.imprimeRelatorioDeVendas();
+		} catch (IOException e) {
+			System.err.println(e.getMessage());
+		}
+	}
+
+	public static void main(String[] args) throws SQLException, IOException {
+
+		FileWriter escrita = new FileWriter("estoque.txt");
+		escrita.write("Código\t\tNome\t\tQuantidade\t\tValor");
+		escrita.close();
 
 		Scanner teclado = new Scanner(System.in);
 		int opcaoExterna = 0;
+		LojaDePecasDAO pecasDAO = new LojaDePecasDAO();
 
 		System.out.println("\n\t(1) - Para Gerenciar Peças Do Estoque;\n");
-		System.out.println("\n\t(2) - Para Gerenciar Vendas;\n");
-		System.out.println("\n\t(0) - Para Sair;\n");
+		System.out.println("\t(2) - Para Gerenciar Vendas;\n");
+		System.out.println("\t(0) - Para Sair;\n");
 
-		System.out.print("\n\tOpção: \n");
+		System.out.print("\n\tOpção: ");
 
 		opcaoExterna = teclado.nextInt();
 
@@ -206,12 +275,13 @@ public class ProgramaPrincipal {
 				break;
 
 			case 2:
-				// Vendas
-				break;
+
+				gerenciaVendas(teclado, pecasDAO);
 
 			}
-
-		} while (opcaoExterna == 0);
+		} while (opcaoExterna != 0);
+		File file = new File("estoque.txt");
+		file.delete();
 		teclado.close();
 	}
 }

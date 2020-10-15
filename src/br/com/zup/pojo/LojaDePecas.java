@@ -2,7 +2,17 @@ package br.com.zup.pojo;
 
 public class LojaDePecas {
 
+	private int codigoDeBarras;
 	private String nome;
+
+	public int getCodigoDeBarras() {
+		return codigoDeBarras;
+	}
+
+	public void setCodigoDeBarras(int codigoDeBarras) {
+		this.codigoDeBarras = codigoDeBarras;
+	}
+
 	private String modeloDoCarro;
 	private String fabricante;
 	private float precoDeCusto;
@@ -28,9 +38,11 @@ public class LojaDePecas {
 
 	@Override
 	public String toString() {
-		return "Peças [nome=" + nome + ", Modelo Do Carro=" + modeloDoCarro + ", Fabricante=" + fabricante
-				+ ", Preço De Custo=" + precoDeCusto + ", Preço De Venda=" + precoDeVenda + ", Quantidade Em Estoque="
-				+ quantidadeEmEstoque + ", Categoria=" + categoria + "]";
+		return "\t ----------------------" + "\n\t CÓDIGO DE BARRAS = " + codigoDeBarras + "\n\t NOME = " + nome
+				+ "\n\t MODELO DO CARRO = " + modeloDoCarro + "\n\t FABRICANTE = " + fabricante
+				+ "\n\t PREÇO DE CUSTO = R$ " + precoDeCusto + "\n\t PREÇO DE VENDA = R$ " + precoDeVenda
+				+ "\n\t QUANTIDADE EM ESTOQUE = " + quantidadeEmEstoque + "\n\t CATEGORIA = " + categoria
+				+ "\n\t ----------------------";
 	}
 
 	public String getNome() {
