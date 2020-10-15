@@ -72,7 +72,6 @@ public class ProgramaPrincipal {
 				buscaPecasPorCategoria(teclado, pecasDAO);
 				break;
 			case 0:
-				System.out.println("\n\tMuito Obrigado!\n");
 				break;
 			default:
 				System.out.println("\n\tOpção Inválida, Tente Novamente\n");
@@ -211,7 +210,6 @@ public class ProgramaPrincipal {
 				break;
 
 			case 0:
-				System.out.println("\n\tMuito Obrigado!\n");
 				break;
 
 			default:
