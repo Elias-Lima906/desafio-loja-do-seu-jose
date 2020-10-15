@@ -1,3 +1,1 @@
 Código		Nome		Quantidade		Valor
-1		Volante		4		R$ 1520,00
-6		Adesivos Para Portas		10		R$ 850,00

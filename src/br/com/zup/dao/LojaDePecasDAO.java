@@ -150,7 +150,7 @@ public class LojaDePecasDAO {
 
 		List<LojaDePecas> pecas = new ArrayList<LojaDePecas>();
 
-		String sqlConsulta = "select * from estoque_de_pecas where codigo_de_barras = ? ;";
+		String sqlConsulta = "select * from estoque_de_pecas where modelo_do_carro = ? ;";
 
 		PreparedStatement stmt = connection.prepareStatement(sqlConsulta);
 
