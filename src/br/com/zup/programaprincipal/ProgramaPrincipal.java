@@ -1,6 +1,5 @@
 package br.com.zup.programaprincipal;
 
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -107,8 +106,9 @@ public class ProgramaPrincipal {
 		String categoria = teclado.next();
 
 		try {
-			pecasDAO.adicionaPeca(new LojaDePecas(nome, modeloDoCarro, fabricante, precoDeCusto, precoDeVenda,
-					quantidadeEmEstoque, categoria));
+			LojaDePecas peca = new LojaDePecas(nome, modeloDoCarro, fabricante, precoDeCusto, precoDeVenda,
+					quantidadeEmEstoque, categoria);
+			pecasDAO.adicionaPeca(peca);
 			System.out.println("\n\tPeça Adicionada Com Sucesso!\n");
 		} catch (SQLException e) {
 			System.err.println(e.getMessage());
@@ -282,8 +282,9 @@ public class ProgramaPrincipal {
 				break;
 			}
 		} while (opcaoExterna != 0);
-		File file = new File("estoque.txt");
-		file.delete();
+//		File file = new File("estoque.txt");
+//		file.delete();
+		// Reconsertar o arquivo
 		teclado.close();
 	}
 }

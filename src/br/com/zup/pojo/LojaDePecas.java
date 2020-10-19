@@ -1,23 +1,35 @@
 package br.com.zup.pojo;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+
+@Entity
 public class LojaDePecas {
 
+	@Id
+	@Column(name = "codigo_de_barras")
 	private int codigoDeBarras;
+
+	@Column(nullable = false)
 	private String nome;
 
-	public int getCodigoDeBarras() {
-		return codigoDeBarras;
-	}
-
-	public void setCodigoDeBarras(int codigoDeBarras) {
-		this.codigoDeBarras = codigoDeBarras;
-	}
-
+	@Column(name = "modelo_do_carro", nullable = false)
 	private String modeloDoCarro;
+
+	@Column(nullable = false)
 	private String fabricante;
+
+	@Column(name = "preço_de_custo", nullable = false)
 	private float precoDeCusto;
+
+	@Column(name = "preço_de_venda", nullable = false)
 	private float precoDeVenda;
+
+	@Column(name = "quantidade_em_estoque", nullable = false)
 	private int quantidadeEmEstoque;
+
+	@Column(nullable = false)
 	private String categoria;
 
 	public LojaDePecas(String nome, String modeloDoCarro, String fabricante, float precoDeCusto, float precoDeVenda,
@@ -34,6 +46,14 @@ public class LojaDePecas {
 
 	public LojaDePecas() {
 
+	}
+
+	public int getCodigoDeBarras() {
+		return codigoDeBarras;
+	}
+
+	public void setCodigoDeBarras(int codigoDeBarras) {
+		this.codigoDeBarras = codigoDeBarras;
 	}
 
 	@Override

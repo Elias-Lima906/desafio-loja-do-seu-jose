@@ -4,98 +4,65 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.com.zup.connectionfactory.ConnectionFactory;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import javax.persistence.Query;
+
 import br.com.zup.pojo.LojaDePecas;
 
 public class LojaDePecasDAO {
 
-	private List<LojaDePecas> gereciaConsultasNoBancoDeDados(List<LojaDePecas> pecas, PreparedStatement stmt)
-			throws SQLException {
-
-		ResultSet rs = stmt.executeQuery();
-		while (rs.next()) {
-			LojaDePecas peca = new LojaDePecas();
-
-			peca.setCodigoDeBarras(rs.getInt("codigo_de_barras"));
-			peca.setNome(rs.getString("nome"));
-			peca.setModeloDoCarro(rs.getNString("modelo_do_carro"));
-			peca.setFabricante(rs.getString("fabricante"));
-			peca.setPrecoDeCusto(rs.getFloat("preço_de_custo"));
-			peca.setPrecoDeVenda(rs.getFloat("preço_de_venda"));
-			peca.setQuantidadeEmEstoque(rs.getInt("quantidade_em_estoque"));
-			peca.setCategoria(rs.getString("categoria"));
-
-			pecas.add(peca);
-
-		}
-		return pecas;
-	}
-
-	private Connection connection;
+	EntityManager manager;
 
 	public LojaDePecasDAO() {
-		this.connection = new ConnectionFactory().getConnection();
+
+		EntityManagerFactory managerFactory = Persistence.createEntityManagerFactory("carros");
+		this.manager = managerFactory.createEntityManager();
+
 	}
 
 	public void adicionaPeca(LojaDePecas peca) throws SQLException {
 
-		// - cadastrar uma nova peça;
+		manager.getTransaction().begin();
+		manager.persist(peca);
+		manager.getTransaction().commit();
 
-		String sqlInsert = "insert into estoque_de_pecas "
-				+ "(nome, modelo_do_carro, fabricante, preço_de_custo, preço_de_venda, quantidade_em_estoque, categoria) "
-				+ "values (?, ?, ?, ?, ?, ?, ?);";
-
-		PreparedStatement stmt = connection.prepareStatement(sqlInsert);
-		stmt.setString(1, peca.getNome());
-		stmt.setString(2, peca.getModeloDoCarro());
-		stmt.setString(3, peca.getFabricante());
-		stmt.setFloat(4, peca.getPrecoDeCusto());
-		stmt.setFloat(5, peca.getPrecoDeVenda());
-		stmt.setInt(6, peca.getQuantidadeEmEstoque());
-		stmt.setString(7, peca.getCategoria());
-
-		stmt.execute();
-		stmt.close();
 	}
 
-	public List<LojaDePecas> consultaPecas() throws SQLException {
+	public List<LojaDePecas> consultaPecas() throws EstoqueDeCarrosException {
 
-		// - listar todas as peças em estoque;
+		Query query = manager.createQuery("select c from LojaDePecas as c");
 
-		List<LojaDePecas> pecas = new ArrayList<LojaDePecas>();
+		List<LojaDePecas> pecasDB = query.getResultList();
 
-		String sqlConsulta = "select * from estoque_de_pecas";
-
-		PreparedStatement stmt = connection.prepareStatement(sqlConsulta);
-
-		pecas = gereciaConsultasNoBancoDeDados(pecas, stmt);
-
-		if (pecas != null) {
-			return pecas;
-
+		if (pecasDB != null) {
+			return pecasDB;
 		} else {
-			throw new SQLException("\n\tNÃO HÁ PEÇAS NO BANCO DE DADOS!\n");
+			throw new EstoqueDeCarrosException("\n\tNÃO HÁ PEÇAS NO BANCO DE DADOS!\n");
 		}
+
 	}
 
-	public void removePecaPorCodigoDeBarras(int codigoDeBarras) throws SQLException {
+	public void removePecaPorCodigoDeBarras(int codigoDeBarras) throws EstoqueDeCarrosException {
 
 		// - remover uma peça do estoque;
+		LojaDePecas peca = manager.find(LojaDePecas.class, codigoDeBarras);
 
-		String sqlConsulta = "delete from estoque_de_pecas where codigo_de_barras = ?;";
+		if (peca != null) {
 
-		PreparedStatement stmt = connection.prepareStatement(sqlConsulta);
-
-		stmt.setInt(1, codigoDeBarras);
-
-		stmt.execute();
+			manager.getTransaction().begin();
+			manager.remove(peca);
+			manager.getTransaction().commit();
+		} else {
+			throw new EstoqueDeCarrosException("\n\tPEÇA NÃO ENCONTRADA PELO CÓDIGO DE BARRAS!\n");
+		}
 
 	}
 
