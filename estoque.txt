@@ -1,2 +1,0 @@
-Código		Nome		Quantidade		Valor
-8		Tapete		2		R$ 117,60

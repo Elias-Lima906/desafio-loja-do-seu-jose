@@ -9,12 +9,12 @@ http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
 		<!-- JPA -->
 		<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 
-		<class>br.com.zup.pojo.LojaDePecas</class>
+		<class>br.com.zup.pojo.PecaPojo</class>
 		<properties>
 			<property name="javax.persistence.jdbc.driver"
 				value="com.mysql.cj.jdbc.Driver" />
 			<property name="javax.persistence.jdbc.url"
-				value="jdbc:mysql://localhost:3306/estoque_de_pecas?useTimezone=true&amp;	serverTimezone=UTC" />
+				value="jdbc:mysql://localhost:3306/oficina_de_carros?useTimezone=true&amp;	serverTimezone=UTC" />
 			<property name="javax.persistence.jdbc.user" value="root" />
 			<property name="javax.persistence.jdbc.password"
 				value="root" />

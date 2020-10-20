@@ -5,7 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 
 @Entity
-public class LojaDePecas {
+public class PecaPojo {
 
 	@Id
 	@Column(name = "codigo_de_barras")
@@ -32,9 +32,10 @@ public class LojaDePecas {
 	@Column(nullable = false)
 	private String categoria;
 
-	public LojaDePecas(String nome, String modeloDoCarro, String fabricante, float precoDeCusto, float precoDeVenda,
-			int quantidadeEmEstoque, String categoria) {
+	public PecaPojo(int codigoDeBarras, String nome, String modeloDoCarro, String fabricante, float precoDeCusto,
+			float precoDeVenda, int quantidadeEmEstoque, String categoria) {
 		super();
+		this.codigoDeBarras = codigoDeBarras;
 		this.nome = nome;
 		this.modeloDoCarro = modeloDoCarro;
 		this.fabricante = fabricante;
@@ -44,7 +45,7 @@ public class LojaDePecas {
 		this.categoria = categoria;
 	}
 
-	public LojaDePecas() {
+	public PecaPojo() {
 
 	}
 

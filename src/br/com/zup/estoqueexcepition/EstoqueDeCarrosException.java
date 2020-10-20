@@ -1,4 +1,4 @@
-package br.com.zup.dao;
+package br.com.zup.estoqueexcepition;
 
 public class EstoqueDeCarrosException extends Exception {
 
